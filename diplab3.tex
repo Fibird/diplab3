@@ -1,0 +1,210 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University Laboratory Report mainly used in programming
+% LaTeX Template
+% Version 1.0 (12/9/16)
+%
+% Author: Chaoyang Liu
+% E-mail: chaoyanglius@outlook.com 
+% (https://chaoyangliu.cc)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[hyperref,UTF8]{ctexart}
+\usepackage{listings} % Required for setting of code block
+\usepackage[colorlinks,linkcolor=black]{hyperref}
+\usepackage{color}
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{varwidth} % Required for 
+\usepackage{float}
+
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+
+%\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+\CTEXsetup[format={\Large\bfseries}]{section}
+%----------------------------------------------------------------------------------------
+% SETTING OF CODE BLOCK
+%----------------------------------------------------------------------------------------
+\lstset{ % 代码高亮
+	backgroundcolor=\color{white},   % choose the background color
+	basicstyle=\footnotesize\ttfamily,        % size of fonts used for the code
+	columns=fullflexible,
+	numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+	numbersep=0.5em,		% how far the line-numbers are from the code
+	breaklines=true,                 % automatic line breaking only at whitespace
+	captionpos=t,                    % sets the caption-position to bottom
+	tabsize=4,
+	frame = single,
+	framexleftmargin=2em,
+	commentstyle=\color{green},    % comment style
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	keywordstyle=\color{blue},       % keyword style
+	stringstyle=\color[rgb]{0.58,0,0.82}\ttfamily,     % string literal style
+	rulecolor=\color{black},
+	% identifierstyle=\color{red},
+	language=c++,
+	showtabs = false,
+	showstringspaces = false,
+	showspaces = false,
+}
+
+%----------------------------------------------------------------------------------------
+% PDF INFORMATION
+%----------------------------------------------------------------------------------------
+% You need to set it in curly brace
+% according to your information
+\hypersetup{
+	pdftitle={title of your document},
+	pdfauthor={your name},
+	pdfsubject={subject of your document},
+	pdfkeywords={key words},
+}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{频域处理：以傅立叶变换为例} % Title
+
+\author{\kaishu 刘朝洋} % Author name
+
+\date{\today} % Date for the report
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\begin{center}
+\begin{tabular}{l r}
+专业班级: & 计算机141 \\ % Date the experiment was performed
+学生姓名: & 刘朝洋 \\ % Partner names
+指导老师: & 杨龙 % Instructor/supervisor
+\end{tabular}
+\end{center}
+
+% If you wish to include an abstract, uncomment the lines below
+\begin{abstract}
+该实验报告中主要使用OpenCV库函数对某个图像进行离散傅立叶变换。另外，为了进一步理解离散傅立叶变换的性质，又分别对几何变换后的图像进行傅里叶变换。通过对比实验结果来验证离散傅立叶变换的性质。
+\end{abstract}
+
+\pagestyle{plain}
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{实验目的}
+
+\begin{enumerate}
+
+\item 理解傅里叶变换的原理及方法；
+\item 学会使用OpenCV对图像进行傅里叶变换；
+\item 理解傅里叶变换的性质。
+
+\end{enumerate}
+ 
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{实验内容}
+
+\begin{enumerate}
+
+\item 使用OpenCV库函数对原图像进行傅里叶变换；
+\item 将原图像旋转一定角度再进行傅里叶变换，对比变换结果；
+\item 将原图像平移一定单位再进行傅里叶变换，对比变换结果；
+\item 将原图像缩小一定比例再进行傅里叶变换，对比变换结果；
+\item 对图像进行镜像变换再进行傅里叶变换，对比变换结果；
+
+\end{enumerate}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{实验过程}
+
+\subsection{使用代码块}
+
+下面以Hello,word!程序为例：
+
+\begin{lstlisting}
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    cout << "Hello world!" << endl;
+    return 0;
+}
+\end{lstlisting}
+
+\subsection{使用数学公式}
+
+可以通过下面的方式使用数学公式：
+
+\begin{equation}
+AB^2 = BC^2 + AC^2
+\end{equation}
+
+如果要在句中使用数学符号或公式，可以使用$3 \times 3$。不同的数学符号有不同的命令，具体可以在参考该网站：\url{http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference}
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{结果与结论}
+
+\subsection{内容}
+
+这里主要是陈述实验结果，并根据实验结果得出实验结论。不管实验结果怎样，必须如实地描述。为了更好地呈现实验结果，可以采用图表的形式。
+
+\subsection{插入图表}
+
+我们可以使用下面的方式插入图片：
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.45\textwidth,height=0.25\textwidth]{placeholder} % Include the image placeholder.png
+\caption{Figure caption.}
+\label{fig:image}
+\end{figure}
+
+当然，插入表格的方法也很类似，如下表所示：
+
+\begin{figure}[H]
+\centering
+\begin{tabular}{|l|c|r|}
+\hline
+left & center & right	\\
+\hline
+本列左对齐 & 本列居中 & 本列右对齐	\\
+\hline
+\end{tabular}
+\caption{表格示例}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+
+\section{实验总结}
+
+实验总结
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+\bibliographystyle{apalike}
+
+\bibliography{sample}
+
+%----------------------------------------------------------------------------------------
+
+
+\end{document}
