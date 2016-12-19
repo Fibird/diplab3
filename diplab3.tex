@@ -128,23 +128,78 @@
 
 \section{实验过程}
 
-\subsection{使用代码块}
+\subsection{对图像进行傅里叶变换}
 
-下面以Hello,word!程序为例：
+下面是对图像进行傅里叶变换的主要步骤：
+
+\begin{enumerate}
+
+\item 扩展原图像已获得DFT处理的最佳大小；
 
 \begin{lstlisting}
-#include <iostream>
+// Expand the image to an optimal size
+	int r = getOptimalDFTSize(transformedSrc.rows);
+	int c = cvGetOptimalDFTSize(transformedSrc.cols);
+	copyMakeBorder(transformedSrc, padded, r - transformedSrc.rows, 0, c - transformedSrc.cols, 0, BORDER_CONSTANT);
+\end{lstlisting}
+\item 将图像转换为复数形式，并将像素的类型转换为\lstinline{float};
 
-using namespace std;
-
-int main()
-{
-    cout << "Hello world!" << endl;
-    return 0;
-}
+\begin{lstlisting}
+// Make place for both the complex and the real values
+	Mat planes[] = { Mat_<float>(padded), Mat::zeros(padded.size(), CV_32F) };
+	Mat complexSrc;
+	merge(planes, 2, complexSrc);
 \end{lstlisting}
 
-\subsection{使用数学公式}
+\item 调用OpenCV库函数对扩展后的图像进行傅里叶变换；
+\begin{lstlisting}
+// Make the Discrete Fourier Transform
+	dft(complexSrc, complexSrc);
+\end{lstlisting}
+\item 将傅里叶变换结果转为模长，得到变换的频谱图；
+
+\begin{lstlisting}
+// Transform the real and complex values to magnitude
+	split(complexSrc, planes);
+	Mat mag(transformedSrc.size(), CV_32F);
+	magnitude(planes[0], planes[1], mag);
+\end{lstlisting}
+
+\item 为了便于观察，将图像进行对数拉伸和均衡化处理。
+
+\begin{lstlisting}
+// Switch to a logarithmic scale
+	mag += Scalar::all(1);
+	log(mag, mag);
+// Normalize
+	normalize(mag, mag, 0, 1, CV_MINMAX);
+\end{lstlisting}
+\item 为了便于分析和处理，将频谱原点移到图像中心；
+
+\begin{lstlisting}
+	int cr = mag.rows / 2; int cc = mag.cols / 2;
+	Mat tl(mag, Rect(0, 0, cc, cr));
+	Mat tr(mag, Rect(cc, 0, cc, cr));
+	Mat bl(mag, Rect(0, cr, cc, cr));
+	Mat br(mag, Rect(cc, cr, cc, cr));
+
+	Mat temp;
+	tl.copyTo(temp);
+	br.copyTo(tl);
+	temp.copyTo(br);
+
+	tr.copyTo(temp);
+	bl.copyTo(tr);
+	temp.copyTo(bl);
+
+\end{lstlisting}
+
+\end{enumerate}
+
+
+\subsection{DFT的时移性质}
+
+
 
 可以通过下面的方式使用数学公式：
 
