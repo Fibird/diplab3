@@ -102,7 +102,7 @@
 
 \item 理解傅里叶变换的原理及方法；
 \item 学会使用OpenCV对图像进行傅里叶变换；
-\item 理解傅里叶变换的性质。
+\item 理解傅里叶变换的几个性质。
 
 \end{enumerate}
  
@@ -118,7 +118,6 @@
 \item 将原图像旋转一定角度再进行傅里叶变换，对比变换结果；
 \item 将原图像平移一定单位再进行傅里叶变换，对比变换结果；
 \item 将原图像缩小一定比例再进行傅里叶变换，对比变换结果；
-\item 对图像进行镜像变换再进行傅里叶变换，对比变换结果；
 
 \end{enumerate}
 
@@ -196,6 +195,26 @@
 
 \end{enumerate}
 
+下面是某图像以及它的DFT结果：
+
+\begin{figure}[H]
+\centering
+\begin{varwidth}[t]{\textwidth}
+\vspace{0pt}
+\includegraphics[height=5cm]{rect.png}
+\caption{原图像}
+\label{fig:rect}
+\end{varwidth}%
+\quad
+\begin{varwidth}[t]{\textwidth}
+\vspace{0pt}
+\centering
+\includegraphics[height=5cm]{rectDFT.png}
+\caption{原图像DFT结果}
+\label{fig:rectDFT}
+\end{varwidth}
+\end{figure}
+
 
 \subsection{DFT的时移性质}
 
@@ -221,7 +240,23 @@ f(x-x_0,y-y_0) \Leftrightarrow F(u,v)e^{j2 \pi (\frac{ux_0}{M} + \frac{vy_0}{N})
 	warpAffine(src, dst, M, src.size(), 1, 0);
 \end{lstlisting}
 
-最后，使用前面的相同的处理方法，对平移过后的图像做傅里叶变换，并对比处理结果。
+下图\ref{fig:shift}为平移变换之后的图像：
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5cm]{shift.png}
+\caption{平移变换后的图像}
+\label{fig:shift}
+\end{figure}
+
+最后，使用前面的相同的处理方法，对平移过后的图像做傅里叶变换，下图\ref{fig:shiftDFT}是DFT结果：
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5cm]{shiftDFT.PNG}
+\caption{平移变换后图像的DFT结果}
+\label{fig:shiftDFT}
+\end{figure}
 
 \subsection{DFT的旋转不变性质}
 
@@ -239,7 +274,24 @@ OpenCV仿射变换同样可以很容易实现图像的旋转，方法与平移�
 	warpAffine(src, dst, rotMat, src.size(), 1, 0);
 \end{lstlisting}
 
-同样，我们需要对旋转后的图像做傅里叶变换，并对比处理结果。
+下图\ref{fig:rotate}是图像顺时针旋转90 \textdegree 之后的结果：
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5cm]{rotate.png}
+\caption{旋转变换后的图像}
+\label{fig:rotate}
+\end{figure}
+
+同样，我们需要对旋转后的图像做傅里叶变换，下图\ref{fig:rotateDFT}为DFT结果：
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5cm]{rotateDFT.png}
+\caption{旋转变换后图像的DFT结果}
+\label{fig:rotateDFT}
+\end{figure}
+
 
 \subsection{DFT的比例性质}
 
@@ -249,57 +301,36 @@ OpenCV仿射变换同样可以很容易实现图像的旋转，方法与平移�
 f(ax,by) \Leftrightarrow \frac{1}{ab}F(\frac{u}{a},\frac{v}{b})
 \end{equation}
 
-这里我以图像缩小为例。
+使用仿射变换同样可以很容易实现图像的缩放。
+
+\begin{lstlisting}
+	Point2f s[3] = { Point2f(src.cols, 0), Point2f(src.cols, src.rows), Point2f(0, src.rows) };
+	Point2f d[3] = { Point2f(Scale * src.cols, 0), Point2f(Scale * src.cols, Scale * src.rows), Point2f(0, Scale * src.rows) };
+	Mat M(2, 3, CV_32FC1);
+	M = getAffineTransform(s, d);
+	Mat tmp = src.clone();
+	warpAffine(src, tmp, M, src.size(), 1, 0);
+	Mat(tmp, Rect(0, 0, Scale * src.cols, Scale * src.rows)).copyTo(dst);
+\end{lstlisting}
+
+
+接着对图像进行DFT，下图\ref{fig:scaleDFT}是处理结果：
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5cm]{scaleDFT.PNG}
+\caption{缩小后图像的DFT结果}
+\label{fig:scaleDFT}
+\end{figure}
+
 %----------------------------------------------------------------------------------------
 %	SECTION 4
 %----------------------------------------------------------------------------------------
 
 \section{结果与结论}
 
-\subsection{内容}
+通过上面的过程，不难发现，无论对图像进行平移、旋转还是缩放，图像的DFT结果仍然保持不变。这与离散傅立叶变换的性质，即平移性质、旋转不变性质以及比例性质，完全吻合。
 
-这里主要是陈述实验结果，并根据实验结果得出实验结论。不管实验结果怎样，必须如实地描述。为了更好地呈现实验结果，可以采用图表的形式。
-
-\subsection{插入图表}
-
-我们可以使用下面的方式插入图片：
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.45\textwidth,height=0.25\textwidth]{placeholder} % Include the image placeholder.png
-\caption{Figure caption.}
-\label{fig:image}
-\end{figure}
-
-当然，插入表格的方法也很类似，如下表所示：
-
-\begin{figure}[H]
-\centering
-\begin{tabular}{|l|c|r|}
-\hline
-left & center & right	\\
-\hline
-本列左对齐 & 本列居中 & 本列右对齐	\\
-\hline
-\end{tabular}
-\caption{表格示例}
-\end{figure}
-
-%----------------------------------------------------------------------------------------
-%	SECTION 5
-%----------------------------------------------------------------------------------------
-
-\section{实验总结}
-
-实验总结
-
-%----------------------------------------------------------------------------------------
-%	BIBLIOGRAPHY
-%----------------------------------------------------------------------------------------
-
-\bibliographystyle{apalike}
-
-\bibliography{sample}
 
 %----------------------------------------------------------------------------------------
 
